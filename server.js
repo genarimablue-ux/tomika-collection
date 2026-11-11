@@ -38,15 +38,17 @@ const pool = mysql.createPool({
   database: databaseName,
   ssl: {
     rejectUnauthorized: false,
-    minVersion: 'TLSv1.2'
+    checkServerIdentity: () => null
   },
   waitForConnections: true,
-  connectionLimit: 8,
-  queueLimit: 100,
-  connectTimeout: 5000,
+  connectionLimit: 5,
+  queueLimit: 0,
+  connectTimeout: 10000,
   enableKeepAlive: true,
-  timezone: "Z",
-});const app = express();
+  charset: 'utf8mb4_unicode_ci'
+});
+
+const app = express();
 app.set("trust proxy", 1);
 app.disable("x-powered-by");
 app.use("/api", express.json({ limit: "128kb" }));
