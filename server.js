@@ -480,4 +480,4 @@ app.use((error, _req, res, _next) => {
 });
 
 await schemaReady;
-app.listen(PORT, "0.0.0.0", () => console.log(`Tomica server listening on ${PORT}`));
+export default app;
