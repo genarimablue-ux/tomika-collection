@@ -481,5 +481,4 @@ app.use((error, _req, res, _next) => {
   return res.status(500).json({ error: "保存に失敗しました。少し待ってからもう一度お試しください。" });
 });
 
-await schemaReady;
 export default app;
