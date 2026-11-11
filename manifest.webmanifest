@@ -1,0 +1,18 @@
+{
+  "name": "Futaのトミカコレクション",
+  "short_name": "Futaのトミカ",
+  "lang": "ja",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f3ef",
+  "theme_color": "#f5f3ef",
+  "icons": [
+    {
+      "src": "./images/tomica-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

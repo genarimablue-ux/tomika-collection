@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" role="img" aria-label="画像未登録">
+  <rect width="320" height="180" rx="8" fill="#eeece6"/>
+  <g fill="none" stroke="#bcb8af" stroke-linecap="round" stroke-linejoin="round" stroke-width="3">
+    <path d="M62 105h23l17-27c4-7 11-11 19-11h64c10 0 17 4 24 13l19 25h24c9 0 15 6 15 15v14H50v-14c0-8 5-15 12-15z"/>
+    <path d="m108 99 12-20c2-4 6-6 11-6h31v26zm62-26v26h42l-15-20c-2-4-7-6-11-6z"/>
+    <path d="M50 119h215" stroke-dasharray="5 9" opacity=".55"/>
+  </g>
+  <g fill="#eeece6" stroke="#a9a59d" stroke-width="3">
+    <circle cx="101" cy="132" r="17"/><circle cx="218" cy="132" r="17"/>
+  </g>
+  <g fill="#a9a59d"><circle cx="101" cy="132" r="6"/><circle cx="218" cy="132" r="6"/></g>
+  <text x="160" y="164" fill="#9b978f" font-family="sans-serif" font-size="10" letter-spacing="2" text-anchor="middle">IMAGE TO BE ADDED</text>
+</svg>

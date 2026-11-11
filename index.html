@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f5f3ef" />
+    <meta name="description" content="Futaのトミカコレクション。家族の所持状況を番号順に記録します。" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Futaのトミカ" />
+    <link rel="icon" href="./images/tomica-mark.svg" type="image/svg+xml" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="stylesheet" href="./styles.css?v=20261109-linefix2" />
+    <title>Futaのトミカコレクション</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="./" aria-label="Futaのトミカコレクション ホーム">
+          <img class="brand-mark" src="./images/tomica-mark.svg" alt="" width="38" height="38" />
+          <span class="brand-copy">
+            <span class="brand-name">Futaのトミカコレクション</span>
+          </span>
+        </a>
+        <span class="sync-indicator" id="sync-status" data-state="connecting" role="status" aria-live="polite">
+          <span class="sync-dot" aria-hidden="true"></span>
+          <span id="sync-label">接続中</span>
+        </span>
+        <div class="header-actions">
+          <button class="quiet-button" id="undo-button" type="button" disabled title="共有データの直前の操作を取り消す">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.5 6 4 9.5l3.5 3.5M4.5 9.5h7a4 4 0 0 1 0 8H9" /></svg>
+            <span>ひとつ戻す</span>
+          </button>
+          <span class="header-divider" aria-hidden="true"></span>
+          <button class="quiet-button backup-button" id="export-button" type="button" aria-label="所持データをバックアップ" title="所持データをバックアップ">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3.5v9m0-9 3.25 3.25M10 3.5 6.75 6.75M4 12.5v3h12v-3" /></svg>
+            <span>バックアップ</span>
+          </button>
+          <button class="icon-button" id="import-button" type="button" aria-label="バックアップを読み込む" title="バックアップを読み込む">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 16.5v-9m0 9-3.25-3.25M10 16.5l3.25-3.25M4 7.5v-3h12v3" /></svg>
+          </button>
+          <input id="import-file" type="file" accept="application/json,.json" hidden />
+        </div>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <section class="intro" aria-labelledby="page-title">
+        <div class="home-hero">
+          <img class="home-hero-image" src="./images/futa-tomica-family-hero.jpeg" alt="集めたトミカが並ぶ写真" width="1600" height="973" decoding="async" fetchpriority="low" />
+          <h1 class="home-hero-title" id="page-title"><span>Futa</span><span>トミカコレクション</span></h1>
+        </div>
+        <div class="intro-meta">
+          <div class="intro-copy">
+            <p class="intro-text">集めた数を、番号順に。<br class="mobile-break" />家族で見返せる小さな記録帳。</p>
+          </div>
+          <div class="collection-summary" aria-label="コレクションの概要">
+          <div class="summary-topline">
+            <span class="summary-label">COLLECTION STATUS</span>
+            <span class="summary-range">NO. 001 — 150</span>
+          </div>
+          <div class="summary-numbers">
+            <div class="summary-stat">
+              <span class="summary-value" id="owned-count">…</span>
+              <span class="summary-caption">種類</span>
+            </div>
+            <span class="summary-slash" aria-hidden="true">/</span>
+            <div class="summary-stat summary-total-stat">
+              <span class="summary-value" id="total-count">…</span>
+              <span class="summary-caption">台</span>
+            </div>
+            <span class="summary-divider" aria-hidden="true"></span>
+            <div class="summary-progress-copy">
+              <span class="summary-caption">公式ラインナップ</span>
+              <span class="summary-progress-value" id="progress-label">読み込み中</span>
+            </div>
+          </div>
+          <div class="progress-track" role="progressbar" id="progress-bar" aria-label="公式トミカの所持種類の割合" aria-valuemin="0" aria-valuemax="150" aria-valuenow="0" aria-valuetext="読み込み中">
+            <span class="progress-fill" id="progress-fill"></span>
+          </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="collection-section" aria-labelledby="collection-title">
+        <div class="section-heading">
+          <div class="section-title-wrap">
+            <p class="eyebrow section-eyebrow">THE COLLECTION</p>
+            <h2 id="collection-title">コレクション</h2>
+          </div>
+          <span class="result-count" id="result-count">読み込み中</span>
+        </div>
+
+        <div class="toolbar">
+          <label class="search-box" for="search-input">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.8" cy="8.8" r="5.6" /><path d="m13 13 4 4" /></svg>
+            <input id="search-input" type="search" placeholder="番号・名前で検索" autocomplete="off" />
+            <kbd>/</kbd>
+          </label>
+          <div class="toolbar-actions">
+            <div class="filter-tabs" role="group" aria-label="表示するトミカ">
+              <button class="filter-tab" type="button" data-filter="all" aria-pressed="false">すべて <span id="all-tab-count">…</span></button>
+              <button class="filter-tab is-active" type="button" data-filter="current" aria-pressed="true">現行モデル <span id="current-tab-count">150</span></button>
+              <button class="filter-tab" type="button" data-filter="other" aria-pressed="false">その他 <span id="other-tab-count">…</span></button>
+              <button class="filter-tab" type="button" data-filter="owned" aria-pressed="false">持っている <span id="owned-tab-count">…</span></button>
+            </div>
+            <button class="add-custom-button" id="add-custom-button" type="button" hidden>
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12" /></svg>
+              <span>車両を追加</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="grid-wrap">
+          <div class="tomica-grid" id="tomica-grid" aria-live="polite" aria-busy="true"></div>
+          <div class="empty-state is-loading" id="empty-state">
+            <span class="empty-mark" id="empty-mark" aria-hidden="true">…</span>
+            <p class="empty-title" id="empty-title">登録状況を読み込み中</p>
+            <p class="empty-copy" id="empty-copy">家族の登録状況をクラウドから取得しています。少しお待ちください。</p>
+            <button class="empty-add-button" id="empty-add-button" type="button" hidden>最初の1台を登録</button>
+          </div>
+        </div>
+        <p class="list-note"><span class="note-dot" aria-hidden="true"></span><span>カードをタップすると所持数が増えます。家族の変更は数秒で同期されます。公開URLを知る人は誰でも閲覧・編集できます。</span></p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <span>Futaのトミカコレクション</span>
+        <span>家族のコレクションを、たのしく記録。</span>
+      </div>
+    </footer>
+
+    <dialog class="reset-dialog" id="reset-dialog" aria-labelledby="reset-title">
+      <div class="dialog-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M5 7h14M9 7V4.5h6V7m-8 0 .8 12.5h8.4L17 7m-6 4v5m2-5v5" /></svg>
+      </div>
+      <p class="eyebrow dialog-eyebrow">RESET ITEM</p>
+      <h2 id="reset-title">所持数をリセットしますか？</h2>
+      <p class="dialog-copy" id="reset-copy">所持数を0に戻します。この操作は「ひとつ戻す」で取り消せます。</p>
+      <div class="dialog-actions">
+        <button class="dialog-cancel" id="cancel-reset" type="button">キャンセル</button>
+        <button class="dialog-confirm" id="confirm-reset" type="button">リセットする</button>
+      </div>
+    </dialog>
+
+    <dialog class="custom-dialog" id="custom-dialog" aria-labelledby="custom-title">
+      <form id="custom-form" class="custom-form">
+        <p class="eyebrow dialog-eyebrow">ADD TO OTHER</p>
+        <h2 id="custom-title">その他の車両を登録</h2>
+        <p class="dialog-copy">廃盤品や限定品など、公式番号のないトミカを追加できます。</p>
+        <label class="field-label" for="custom-name">名前</label>
+        <input class="text-field" id="custom-name" name="name" type="text" maxlength="120" autocomplete="off" placeholder="例：トミカ博限定 はたらく車" required />
+        <span class="field-label photo-field-label">写真</span>
+        <div class="photo-actions">
+          <button class="photo-pick-button" id="camera-button" type="button">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 6h3l1.2-1.5h4.6L13.5 6h3v9h-13z" /><circle cx="10" cy="10.5" r="2.8" /></svg>
+            カメラで撮る
+          </button>
+          <button class="photo-pick-button" id="gallery-button" type="button">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3.5" width="14" height="13" rx="1.5" /><circle cx="7.2" cy="7.5" r="1.2" /><path d="m4 14 4-3.5 2.5 2 2.5-3 3 4" /></svg>
+            写真を選ぶ
+          </button>
+        </div>
+        <input id="camera-input" type="file" accept="image/*" capture="environment" hidden />
+        <input id="gallery-input" type="file" accept="image/*" hidden />
+        <div class="image-preview" id="image-preview" hidden>
+          <img id="preview-image" alt="登録する写真のプレビュー" />
+          <button class="remove-photo" id="remove-photo-button" type="button" aria-label="写真を外す">×</button>
+        </div>
+        <p class="upload-hint">画像は8MBまで。写真は家族で共有するクラウドへ保存されます。</p>
+        <div class="dialog-actions">
+          <button class="dialog-cancel" id="cancel-custom" type="button">キャンセル</button>
+          <button class="dialog-confirm" id="save-custom" type="submit">登録する</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="./app.js?v=20261109-linefix2"></script>
+  </body>
+</html>
