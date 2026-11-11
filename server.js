@@ -31,7 +31,11 @@ const databaseName = decodeURIComponent(dbUrl.pathname.replace(/^\/+/, ""));
 if (!dbUrl.hostname || !databaseName) throw new Error("DATABASE_URL must include a host and database name.");
 
 const pool = mysql.createPool({
-  uri: process.env.DATABASE_URL,
+  host: dbUrl.hostname,
+  port: Number(dbUrl.port || 24839),
+  user: decodeURIComponent(dbUrl.username),
+  password: decodeURIComponent(dbUrl.password),
+  database: databaseName,
   ssl: {
     rejectUnauthorized: false,
     minVersion: 'TLSv1.2'
@@ -42,8 +46,7 @@ const pool = mysql.createPool({
   connectTimeout: 5000,
   enableKeepAlive: true,
   timezone: "Z",
-});
-const app = express();
+});const app = express();
 app.set("trust proxy", 1);
 app.disable("x-powered-by");
 app.use("/api", express.json({ limit: "128kb" }));
