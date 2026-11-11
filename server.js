@@ -36,7 +36,10 @@ const pool = mysql.createPool({
   user: decodeURIComponent(dbUrl.username),
   password: decodeURIComponent(dbUrl.password),
   database: databaseName,
- ssl: { rejectUnauthorized: false },
+  ssl: {
+    rejectUnauthorized: false,
+    minVersion: 'TLSv1.2'
+  },
   waitForConnections: true,
   connectionLimit: 8,
   queueLimit: 100,
@@ -44,7 +47,6 @@ const pool = mysql.createPool({
   enableKeepAlive: true,
   timezone: "Z",
 });
-
 const app = express();
 app.set("trust proxy", 1);
 app.disable("x-powered-by");
